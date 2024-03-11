@@ -17,6 +17,34 @@ class GetHomePage(APIView):
     def get(self, request):
         return render(request, "upload.html")
 
+class GetFileDetailsById(APIView):
+    def get(self, request, id):
+        uploaded_file = get_object_or_404(UploadedFile, id = id)
+        try:
+            file_serializer = CreateParentFileSerializer(uploaded_file)
+        except Exception as e:
+            return Response({"error": str(e)}, status.HTTP_400_BAD_REQUEST)
+        file_details = get_object_or_404(FileDetails, parent_file_id = id)
+        try:
+            file_details_serializer = CreateFileDetailsSerializer(file_details)
+            return Response({
+                "file": file_serializer.data,
+                "details": file_details_serializer.data
+            }, status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status.HTTP_400_BAD_REQUEST)
+
+
+class GetAllFiles(APIView):
+    def get(self, request):
+        try:
+            all_files = UploadedFile.objects.all().order_by("-uploaded_at")
+            all_files_serializer = CreateParentFileSerializer(all_files, many=True)
+            return Response(all_files_serializer.data, status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class PostFile(APIView):
 
@@ -48,8 +76,7 @@ class PostFile(APIView):
             new_file_details.parent_file = uploaded_file
             new_file_details.data_types = convert_to_python_data_types(temp)
             new_file_details.save()
-
-            return JsonResponse(temp, safe=False)
+            return Response(makeFileDetails(new_file_details, uploaded_file), status.HTTP_200_OK)
 
         return Response(
             "File not uploaded successfully. Please Try again",
@@ -69,4 +96,16 @@ class UpdateDataTypes(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status.HTTP_200_OK)
-        return Response("Error: There seem to be some problem ", status.HTTP_200_OK)
+        return Response({
+            "error": serializer.error
+            }, status.HTTP_200_OK)
+
+class DeleteFileById(APIView):
+    def delete(self, request, id):
+        file_instance = get_object_or_404(UploadedFile, id=id)
+        try:
+            file_instance.delete()
+            return Response("File deleted successfully", status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response({"error": str(e)}, status.HTTP_400_BAD_REQUEST) 
+

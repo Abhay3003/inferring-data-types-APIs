@@ -38,10 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'uplaodfile.apps.UplaodfileConfig'
+    'uplaodfile.apps.UplaodfileConfig',
+    'rest_framework',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -71,6 +74,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
+CORS_ALLOW_HEADERS = (
+    "content-disposition",
+    "accept-encoding",
+    "access-control-allow-headers",
+    "content-type",
+    "accept",
+    "origin",
+    "authorization",
+    "authentication",
+)
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

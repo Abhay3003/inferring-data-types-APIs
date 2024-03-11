@@ -1,3 +1,5 @@
+from ..models import *
+
 
 pandas_to_python = {
     "object": "String",
@@ -20,3 +22,13 @@ def validate_update_data_types(dictionary):
         if value not in valid_data_types:
             return False
     return True
+
+
+def makeFileDetails(fileDetails, uploadedFile):
+    response = {
+        "file_id": uploadedFile.id,
+        "file_name": uploadedFile.file_name,
+        "data_types": fileDetails.data_types
+    }
+
+    return response

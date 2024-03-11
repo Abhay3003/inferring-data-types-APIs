@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+#static file folders
+
+*/static
+backend/static
+
 # Distribution / packaging
 .Python
 build/
@@ -213,5 +218,3 @@ packages/react-devtools-extensions/.tempUserDataDir
 packages/react-devtools-inline/dist
 packages/react-devtools-shell/dist
 packages/react-devtools-timeline/dist
-powerpuff/auths/migrations/0001_initial.py
-powerpuff/industry/migrations/0001_initial.py
