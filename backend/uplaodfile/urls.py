@@ -14,7 +14,7 @@ urlpatterns = [
     path("", GetHomePage.as_view(), name="home-page"),
     path("upload/", PostFile.as_view(), name="post-file"),
     path(
-        "update-data-types/<int:file_id>/",
+        "update-data-types/<int:id>/",
         UpdateDataTypes.as_view(),
         name="update-data-types",
     ),

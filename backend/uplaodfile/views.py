@@ -87,11 +87,12 @@ class PostFile(APIView):
 
 
 class UpdateDataTypes(APIView):
-    def put(self, request, file_id):
-        file_details_instance = get_object_or_404(FileDetails, parent_file_id=file_id)
+    def put(self, request, id):
+        file_details_instance = get_object_or_404(FileDetails, parent_file_id=id)
+        
         if not validate_update_data_types(request.data.get("data_types")):
             return Response(
-                "Given data type is not supported. Please select a valid data type",
+                {"error": "Given data type is not supported. Please select a valid data type"},
                 status.HTTP_400_BAD_REQUEST,
             )
         serializer = CreateFileDetailsSerializer(
