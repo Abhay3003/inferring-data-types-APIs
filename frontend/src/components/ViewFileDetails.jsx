@@ -213,9 +213,10 @@ const ViewFileDetails = ({ fileId }) => {
                                 <MenuItem value="DateTime">DateTime</MenuItem>
                                 <MenuItem value="Integer">Integer</MenuItem>
                                 <MenuItem value="Float">Float</MenuItem>
-                                <MenuItem value="Categorical Values">
-                                  Categorical Values
-                                </MenuItem>
+                                <MenuItem value="Categorical Values"> Categorical Values </MenuItem>
+                                <MenuItem value="TimeFrame">TimeFrame</MenuItem>
+                                <MenuItem value="Boolean">Boolean</MenuItem>
+                                <MenuItem value="Key-Value Mapping">Key-Value Mapping</MenuItem>                                  
                               </Select>
                             </FormControl>
                           </TableCell>

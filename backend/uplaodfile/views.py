@@ -12,12 +12,6 @@ from django.http import JsonResponse
 from .serializers import *
 
 
-class GetHomePage(APIView):
-
-    def get(self, request):
-        return render(request, "upload.html")
-
-
 class GetFileDetailsById(APIView):
     def get(self, request, id):
         uploaded_file = get_object_or_404(UploadedFile, id=id)
@@ -54,16 +48,15 @@ class PostFile(APIView):
             extension = file.name.split(".")
             if extension[1] != "csv" and extension[1] != ".xslx":
                 return Response(
-                    "Please upload the correct file", status.HTTP_400_BAD_REQUEST
+                    {"error": "Please upload the correct file"}, status.HTTP_400_BAD_REQUEST
                 )
             uploaded_file = UploadedFile(file=file)
             uploaded_file.file_name = file.name
             uploaded_file.save()
-
             process = subprocess.run(
                 [
-                    "python",
-                    f"{os.getcwd()}/backend/scripts/script.py",
+                    "python3",
+                    f"{os.getcwd()}/uplaodfile/scripts/script.py",
                     uploaded_file.file.path,
                 ],
                 check=True,
