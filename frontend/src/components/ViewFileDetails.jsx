@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
 import {
   Grid,
@@ -20,7 +20,7 @@ import {
   FormControl,
   InputLabel,
   Button,
-} from "@material-ui/core";
+} from "@material-ui/core"
 
 const useStyles = makeStyles((theme) => ({
   detailsContainer: {
@@ -150,101 +150,115 @@ const ViewFileDetails = ({ fileId }) => {
     }
 
     return (
-      <Card className={classes.detailsContainer}>
-        <CardContent>
-          <Typography variant="h6" className={classes.detailsTitle}>
-            File Details
+      <>
+        <nav>
+          <Link to="/">Go to Home</Link>
+        </nav>
+        <Card className={classes.detailsContainer}>
+          <CardContent>
+            <Typography variant="h6" className={classes.detailsTitle}>
+              File Details
+              <Typography align="right">
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  disabled={isLoading}
+                  onClick={deleteFile}
+                >
+                  Delete File
+                </Button>
+              </Typography>
+            </Typography>
+            <Typography className={classes.detailsTitle}>
+              <Grid item xs={6}>
+                <Typography variant="body2">
+                  File ID: {fileDetails.parent_file}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body2">File Name: {fileName}</Typography>
+              </Grid>
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="h6">Data Types</Typography>
+                <TableContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell className={classes.dataTypeCell}>
+                          Column Name
+                        </TableCell>
+                        <TableCell className={classes.dataTypeCell}>
+                          Data Type
+                        </TableCell>
+                        <TableCell className={classes.dataTypeCell}>
+                          Change To
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {Object.entries(fileDetails.data_types).map(
+                        ([key, value]) => (
+                          <TableRow key={key}>
+                            <TableCell>{key}</TableCell>
+                            <TableCell>{value}</TableCell>
+                            <TableCell>
+                              <FormControl className={classes.changeToSelect}>
+                                <InputLabel
+                                  id={`${key}-select-label`}
+                                ></InputLabel>
+                                <Select
+                                  labelId={`${key}-select-label`}
+                                  value={dataTypes[key]}
+                                  onChange={(event) =>
+                                    handleChangeTo(event, key)
+                                  }
+                                >
+                                  <MenuItem value="String">String</MenuItem>
+                                  <MenuItem value="DateTime">DateTime</MenuItem>
+                                  <MenuItem value="Integer">Integer</MenuItem>
+                                  <MenuItem value="Float">Float</MenuItem>
+                                  <MenuItem value="Categorical Values">
+                                    {" "}
+                                    Categorical Values{" "}
+                                  </MenuItem>
+                                  <MenuItem value="TimeFrame">
+                                    TimeFrame
+                                  </MenuItem>
+                                  <MenuItem value="Boolean">Boolean</MenuItem>
+                                  <MenuItem value="Key-Value Mapping">
+                                    Key-Value Mapping
+                                  </MenuItem>
+                                </Select>
+                              </FormControl>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Grid>
+            </Grid>
             <Typography align="right">
               <Button
                 variant="contained"
-                color="secondary"
+                color="primary"
                 disabled={isLoading}
-                onClick={deleteFile}
+                onClick={updateDataTypes}
               >
-                Delete File
+                Update Data Types
               </Button>
             </Typography>
-          </Typography>
-          <Typography className={classes.detailsTitle}>
-            <Grid item xs={6}>
-              <Typography variant="body2">
-                File ID: {fileDetails.parent_file}
+            {errorMessage && (
+              <Typography variant="body2" color="error">
+                {errorMessage}
               </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="body2">File Name: {fileName}</Typography>
-            </Grid>
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h6">Data Types</Typography>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className={classes.dataTypeCell}>
-                        Column Name
-                      </TableCell>
-                      <TableCell className={classes.dataTypeCell}>
-                        Data Type
-                      </TableCell>
-                      <TableCell className={classes.dataTypeCell}>
-                        Change To
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {Object.entries(fileDetails.data_types).map(
-                      ([key, value]) => (
-                        <TableRow key={key}>
-                          <TableCell>{key}</TableCell>
-                          <TableCell>{value}</TableCell>
-                          <TableCell>
-                            <FormControl className={classes.changeToSelect}>
-                              <InputLabel
-                                id={`${key}-select-label`}
-                              ></InputLabel>
-                              <Select
-                                labelId={`${key}-select-label`}
-                                value={dataTypes[key]}
-                                onChange={(event) => handleChangeTo(event, key)}
-                              >
-                                <MenuItem value="String">String</MenuItem>
-                                <MenuItem value="DateTime">DateTime</MenuItem>
-                                <MenuItem value="Integer">Integer</MenuItem>
-                                <MenuItem value="Float">Float</MenuItem>
-                                <MenuItem value="Categorical Values"> Categorical Values </MenuItem>
-                                <MenuItem value="TimeFrame">TimeFrame</MenuItem>
-                                <MenuItem value="Boolean">Boolean</MenuItem>
-                                <MenuItem value="Key-Value Mapping">Key-Value Mapping</MenuItem>                                  
-                              </Select>
-                            </FormControl>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-          </Grid>
-          <Typography align="right">
-            <Button
-              variant="contained"
-              color="primary"
-              disabled={isLoading}
-              onClick={updateDataTypes}
-            >
-              Update Data Types
-            </Button>
-          </Typography>
-          {errorMessage && (
-            <Typography variant="body2" color="error">
-              {errorMessage}
-            </Typography>
-          )}
-        </CardContent>
-      </Card>
+            )}
+          </CardContent>
+        </Card>
+      </>
     )
   }
 
