@@ -88,7 +88,7 @@ const FileUploader = () => {
       }
     } catch (error) {
       console.error("Upload failed:", error)
-      setUploadMessage("Error uploading file. Please try again." + error)
+      setUploadMessage("Error uploading file. Please try again."+ error)
     } finally {
       setIsLoading(false)
     }

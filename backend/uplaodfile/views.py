@@ -69,7 +69,7 @@ class PostFile(APIView):
         if request.FILES["file"]:
             file = request.FILES["file"]
             extension = file.name.split(".")
-            if extension[1] != "csv" and extension[1] != ".xslx":
+            if file.name.endswith("csv") == False and file.name.endswith("xlsx") == False:
                 return Response(
                     {"error": "Please upload the correct file"}, status.HTTP_400_BAD_REQUEST
                 )
