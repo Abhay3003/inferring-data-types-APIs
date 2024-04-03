@@ -1,4 +1,5 @@
-# rhombus-ai-test
+
+Inferring data types from the given CSV or Excel file. This project allows user to change the inferred data types of the file
 
 ## Running backend
 1. Go into the backend directory using ```cd backend```
@@ -12,3 +13,4 @@
 1. Go into the frontend folder using ``` cd frontend```
 2. Install all the packages using ``` npm install -f ```
 3. Run the react server using ``` npm start```
+
