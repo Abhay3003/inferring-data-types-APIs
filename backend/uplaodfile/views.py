@@ -12,13 +12,15 @@ from django.http import JsonResponse
 from .serializers import *
 
 
-class GetHomePage(APIView):
-
-    def get(self, request):
-        return render(request, "upload.html")
-
-
 class GetFileDetailsById(APIView):
+    """GET method to fetch details of a particular file
+
+    Args:
+        Int (id): File ID
+    Status:
+        400: BAD REQUEST
+        200: OK
+    """
     def get(self, request, id):
         uploaded_file = get_object_or_404(UploadedFile, id=id)
         try:
@@ -37,6 +39,14 @@ class GetFileDetailsById(APIView):
 
 
 class GetAllFiles(APIView):
+    """GET method to fetch all files
+
+    Args:
+        None
+    Status:
+        400: BAD REQUEST
+        200: OK
+    """
     def get(self, request):
         try:
             all_files = UploadedFile.objects.all().order_by("-uploaded_at")
@@ -47,23 +57,29 @@ class GetAllFiles(APIView):
 
 
 class PostFile(APIView):
+    """POST method to upload file
 
+    Args:
+        None
+    Status:
+        400: BAD REQUEST
+        200: OK
+    """
     def post(self, request):
         if request.FILES["file"]:
             file = request.FILES["file"]
             extension = file.name.split(".")
-            if extension[1] != "csv" and extension[1] != ".xslx":
+            if file.name.endswith("csv") == False and file.name.endswith("xlsx") == False:
                 return Response(
-                    "Please upload the correct file", status.HTTP_400_BAD_REQUEST
+                    {"error": "Please upload the correct file"}, status.HTTP_400_BAD_REQUEST
                 )
             uploaded_file = UploadedFile(file=file)
             uploaded_file.file_name = file.name
             uploaded_file.save()
-
             process = subprocess.run(
                 [
-                    "python",
-                    f"{os.getcwd()}/backend/scripts/script.py",
+                    "python3",
+                    f"{os.getcwd()}/uplaodfile/scripts/script.py",
                     uploaded_file.file.path,
                 ],
                 check=True,
@@ -87,6 +103,15 @@ class PostFile(APIView):
 
 
 class UpdateDataTypes(APIView):
+    """PUT method to update data types
+
+    Args:
+        Integer (id): File ID
+        Json (body): updated data types
+    Status:
+        400: BAD REQUEST
+        200: OK
+    """
     def put(self, request, id):
         file_details_instance = get_object_or_404(FileDetails, parent_file_id=id)
         
@@ -106,6 +131,14 @@ class UpdateDataTypes(APIView):
 
 
 class DeleteFileById(APIView):
+    """DELETE method to delete a particular file
+
+    Args:
+        Integer (id): File id
+    Status:
+        400: BAD REQUEST
+        204: NO CONTENT
+    """
     def delete(self, request, id):
         file_instance = get_object_or_404(UploadedFile, id=id)
         try:
